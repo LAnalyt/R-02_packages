@@ -71,5 +71,44 @@ ggplot (mpg, aes(x = displ, y = hwy,
         geom_point() # the points are not blue but reddish instead, because the color layer is specified within the aes mappings. Thus the framework tries to plot the color against an attribute “blue”, but this does not exist within the data. 
 ggplot (mpg, aes(x = displ, y = hwy)) +
         geom_point(color = "blue") # the correct code would be to set the color manually in the geometric layer.
+# By default the points are in mm. Change thickness of the points
+ggplot (mpg, aes(x = displ, y = hwy, stroke = 2)) +
+        geom_point(color = "blue")
 
-(tbc)
+# Map a continuous variable to color, size, and shape
+ggplot (mpg, aes(x = displ, y = hwy, color = cyl, size = hwy, shape = drv)) +
+        geom_point()
+# Or map the same variable to multiple aesthetics
+ggplot (mpg, aes(x = displ, y = hwy, color = cyl, size = cyl)) +
+        geom_point()
+
+# Aesthetics could be assigned to other values, not just variables
+ggplot (mpg, aes(x = displ, y = hwy, color = displ < 5)) +
+        geom_point()
+
+#1.5 Facets
+
+# One way to add additional variables is with aesthetics. Another way, particularly useful for categorical variables, is to split the plot into facets, subplots that each display one subset of the data.
+ggplot (mpg, aes(x = displ, y = hwy)) +
+        geom_point() +
+        facet_wrap(~class) # ~ followed by a variable name
+# Set the number of rows or columns 
+ggplot (mpg, aes(x = displ, y = hwy)) +
+        geom_point() +
+        facet_wrap(~ class, nrow = 2)
+# To facet the plot on the combination of the 2 variables, add facet_grid() with the formular using tilde ~ symbol
+ggplot (mpg, aes(x = displ, y = hwy)) +
+        geom_point() +
+        facet_grid(drv ~ class)
+# Facet not in the rows or columns dimension
+ggplot (mpg, aes(x = displ, y = hwy)) +
+        geom_point() +
+        facet_grid(. ~ cyl) # use the dot . instead
+ggplot (mpg, aes(x = displ, y = hwy)) +
+        geom_point() +
+        facet_grid(drv ~ .)
+# Facet on a continuous variable will result facets for each value
+ggplot (mpg, aes(x = cyl, y = hwy)) +
+        geom_point() +
+        facet_wrap(~displ)
+# With faceting it is easier to examine the individual cases. With coloring it is easier to see how the classes are clustered overall. With larger datasets it's more likely to see the overall clustering than the individual point clouds.
