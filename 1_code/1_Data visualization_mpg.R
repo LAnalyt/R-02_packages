@@ -112,3 +112,34 @@ ggplot (mpg, aes(x = cyl, y = hwy)) +
         geom_point() +
         facet_wrap(~displ)
 # With faceting it is easier to examine the individual cases. With coloring it is easier to see how the classes are clustered overall. With larger datasets it's more likely to see the overall clustering than the individual point clouds.
+
+# 1.5 Geometric objects #######################################
+
+# A geom is the geometrical object that a plot uses to represent data. To change the geom in the plot, change the geom() function
+ggplot(mpg, aes(x = displ, y = hwy)) +
+        geom_point()  # scatterplot like previous examples
+ggplot(mpg, aes(x = displ, y = hwy)) +
+        geom_smooth() # smoothed conditional means aids the eye in seeing patterns in the presence of overplotting.
+# Not every aesthetics works with every geom. E.g, you could set the shape of a point, but not a line. geom_smooth() function sets different linetypes for each unique value of the variable
+ggplot(mpg, aes(x = displ, y = hwy, linetype = drv)) + 
+        geom_smooth()
+
+# Ggplot2 provides over 30 geoms. Many geoms, like geom_smooth(), use a single geometric object to display multiple rows of data. Ggplot2 will automatically group the data for these geoms whenever you map an aesthetic to a discrete variable.
+ggplot(mpg, aes(x = displ, y = hwy, group = drv)) +
+        geom_smooth()
+ggplot(mpg, aes(x = displ, y = hwy, color = drv)) +
+        geom_smooth(show.legend = FALSE) # hide legend
+
+# To display multiple geoms in the same plot, add multiple geom() functions
+ggplot(mpg, aes(x = displ, y = hwy)) +
+        geom_point() +
+        geom_smooth()
+# If you put mapping in a geom() function, ggplot2 will treat them as local mappings for the layer. It will use these mappings to extend or overwrite the global mappings for that layer only.
+ggplot(mpg, aes(x = displ, y = hwy)) +
+        geom_point(mapping = aes(color = class)) +
+        geom_smooth()
+# Specify different data for each layer
+ggplot(mpg, aes(x = displ, y = hwy)) + 
+        geom_point(mapping = aes(color = class)) +
+        geom_smooth(data = filter(mpg, class == "subcompact"), 
+                    se = FALSE) # hide the confidence interval
