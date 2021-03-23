@@ -1,4 +1,3 @@
-# A collection of data visualization for different data sets
+# R packages
 
-1. mpg
-2. diamonds
+**1. data.table**
