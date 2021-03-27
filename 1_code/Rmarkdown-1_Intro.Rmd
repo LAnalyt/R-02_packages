@@ -1,0 +1,119 @@
+---
+title: 'REPORTING WITH R MARKDOWN: INTRODUCTION'
+author: "Trang Ng"
+date: "Last edited: `r format(Sys.time(), '%d %B %Y')`"
+output: html_document
+---
+
+### 1.1 Elements of R Markdown
+**R Markdown** is a tool we use to create efficient reports to summarize analyses and communicate results to an audience. We can create HTML and PDF documents with R Markdown using only R code. R Markdown is also a way to ensure the result is reproducible.
+
+An R Mardown document is made of three components:
+
+-    the code
+-    the text of the report
+-    the metadata for the file
+
+The YAML header containing the metadata appears at the top of the file. YAML is the syntax for hierarchical data structures that is commonly used for configuration files. 
+When we  modifying a file and are ready to see the report, we will need to knit it. Knitting a file how we generate and output file from the R Markdown file. When a file is knitted, R Markdown runs the chunks of R code contained in the files and combines them with the text in the document into an HTML file.
+
+We will build a report based on two datasets from the World Bank International Finance Corporation (IFC). The first dataset, `investment_annual_summary`, provides the summary of the dollars in millions provided to each region for each fiscal year, from 2012 to 2018. To get started on your report, you first want to print out the dataset.
+```{r data, include = FALSE}
+library(readr)
+investment_annual_summary <- read_csv("https://raw.githubusercontent.com/ltrangng/R-02_packages/master/0_data/investment_annual_summary.csv")
+investment_services_projects <- read_csv("https://raw.githubusercontent.com/ltrangng/R-02_packages/master/0_data/investment_services_projects.csv")
+```
+The code is added in a *code chunk* with the chunk delimiters ` ```{r}` and ` ``` `. A code chunk is a section that contains the code that will either render output in the report or display the code itself as part of the report. Chunks are what separate the text of the report from the code.
+```{r}
+investment_annual_summary
+```
+The second dataset `investment_services_projects` displays more specific information about each investment project from the 2012 to 2018 fiscal years. Note that the fiscal year starts on July 1st of the previous year and ends on June 30th of the year of interest. Information listed include project name, company name, sector, project status, and investment amounts.
+```{r}
+investment_services_projects
+```
+
+### 1.2 Formatting text
+Including headers in the report will help clearly label each section.
+
+```
+# Header 1 
+## Header 2  
+### Header 3
+```
+
+# Header 1
+## Header 2
+### Header 3
+
+The size of each header in the knit file is determined by the number of `#` before the text. The more `#` we use, the smaller the text will be.
+
+```
+# Investment Report
+## Datasets
+### Investment Annual Summary
+The `investment_annual_summary` dataset provides a summary of the dollars in millions provided to each region for each fiscal year, from 2012 to 2018.
+```
+> # Investment Report
+## Datasets
+### Investment Annual Summary
+The `investment_annual_summary` dataset provides a summary of the dollars in millions provided to each region for each fiscal year, from 2012 to 2018.
+
+The added sentences are included after the header but before the code chunk, so that when we knit the report, the reader will see the header, dataset description, and code in the intended order. 
+The `#` inside the code chunk will be rendered as a code comment.
+```{r}
+# Print the Investment Annual Summary data
+investment_annual_summary
+```
+There are many options for formatting text in a markdown file:
+```  
+**bold** 
+*italics*  
+~~strikethrough~~  
+```
+**bold**  
+*italics*  
+~~strikethrough~~  
+
+We can also add inline code to the text to clarify that we are refering to `object` names from the code. When we knit the file, the datasets are formated as code and the audience knows thatwe are referring to code within the sentence.
+We can also add website link to the report. Images are added similarly. The reference images can be either local files or images from the web.
+```
+The `investment_annual_summary` dataset from [the IFC](https://www.kaggle.com/theworldbank/ifc-investment-summary-and-services-projects) provides a summary of the dollars in millions provided to each region for each fiscal year, from 2012 to 2018.
+
+![](https://github.githubassets.com/images/modules/logos_page/Octocat.png){width = 50%}
+```
+> The `investment_annual_summary` dataset from [the IFC](https://www.kaggle.com/theworldbank/ifc-investment-summary-and-services-projects) provides a summary of the dollars in millions provided to each region for each fiscal year, from 2012 to 2018.
+
+![](https://github.githubassets.com/images/modules/logos_page/Octocat.png){width=50%}
+
+### 1.3 The YAML header
+The YAML header contains the metadata of the file as key value pairs that correspond to information about the document. 
+```
+---
+title: "TITLE"
+author: "Author's Name"
+output: html_document
+---
+```
+When we create a new markdown document, by default, it includes the title, the author, and the output format. The title and author are provided as strings. The YAML header requires specific formatting to render, and it is important to use `:` after each field and avoid any extra spaces. The output type of the Markdown file is also specified in the YAML header, most commonly as HTML or PDF.
+```
+---
+title: "TITLE"
+author: "Author's Name"
+output: pdf_document
+---
+```
+Switching between these types manually by modifying the output filed of the YAML header to indicate either `html_document` or `pdf_document`.
+
+Another piece of information we can add to the YAML header is the date. This can be entered manually as a string, or add the code `"r Sys.Date()"` to generate the knitting date automatically. We can also modify the data format further with the right `format()`.
+
+![](https://raw.githubusercontent.com/ltrangng/R-02_packages/master/2_resources/R%20Markdown_date%20format.JPG)
+
+Beyond modifying the format of the date, we might want to include text that appears next to the date by adding the text within the string before the code.
+```
+---
+title: "TITLE"
+author: "Author's Name"
+date: "Last edited `r format(Sys.time(), '%d %B %Y')`"
+output: pdf_document
+---
+```
