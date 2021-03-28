@@ -1,0 +1,129 @@
+---
+title: 'REPORTING WITH R MARKDOWN: ADDING ANALYSIS AND VISUALIZATIONS'
+source: "DataCamp"
+date: "Last edited: `r format(Sys.time(), '%d %B %Y')`"
+output: html_document
+---
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(fig.align = "center", echo = TRUE)
+```
+### 2.1 Analyzing data
+We will analyze the `investment_services_projects` and include the analysis in the report. First load the `dplyr` package and the data. The packages should be loaded in the first code chunk in the Markdown file, since this is the first chunk that runs when the file is knit. Listing all necessary packages at the beginning of the file also keeps it organized and ensures we are not listing packages that we already loaded elsewhere in the report. 
+```{r data, include = FALSE}
+library(readr)
+library(dplyr)
+library(ggplot2)
+investment_annual_summary <- read_csv("https://raw.githubusercontent.com/ltrangng/R-02_packages/master/0_data/investment_annual_summary.csv")
+investment_services_projects <- read_csv("https://raw.githubusercontent.com/ltrangng/R-02_packages/master/0_data/investment_services_projects.csv")
+```
+Filtering for the projects in Indonesia using `dplyr` and examine the data:
+```{r}
+indonesia_investment_projects <- investment_services_projects %>% filter(country == "Indonesia")
+indonesia_investment_projects
+```
+Filtering for the projects from a specific year, 2012:
+```{r indonesia-investment-projects}
+indonesia_investment_projects_2012 <- 
+  investment_services_projects %>% filter(country == "Indonesia",
+                                          date_disclosed >= "2011-07-01",
+                                          date_disclosed <= "2012-06-30")
+indonesia_investment_projects_2012 # fiscal year.
+```
+If we update the analysis and the value of the object changes, the text will update automatically to reflect the object value and will not need to update manually.
+```{r indonesia-investment-projects-2012}
+indonesia_investment_projects_2012_total <-
+  indonesia_investment_projects_2012 %>%
+  summarize(sum_total_investment = sum(total_investment, na.rm = TRUE))
+```
+Below the code chunk where we create the object, we reference the subject with `r` `object name` to specify the language and the object name.
+
+The total investment amount of all projects in Indonesia in the 2012 fiscal year was `r indonesia_investment_projects_2012_total` million dollars.
+
+At this point, we have added a few code chunks to the file. If we run into problems when knitting the file, or receive errors about the code, it will become more difficult to spot the errors and easily edit them as we continue to add more code chunks. To solve this problem, we can name each code chunk in the document so that the code is easier to identify. Naming each code chunk is a way of tagging the code throughout the report, which will be helpful when we are looking for a specific section we want to edit. When naming code chunks, it is best to give the code a name that provides some insight into what the code in that section achieves.
+
+#### Investment Projects in Brazil in 2018
+```{r brazil-investment-projects-2018}
+brazil_investment_projects_2018 <- investment_services_projects %>%
+  filter(country == "Brazil",
+         date_disclosed >= "2017-07-01",
+         date_disclosed <= "2018-07-01") 
+brazil_investment_projects_2018
+brazil_investment_projects_2018_total <- brazil_investment_projects_2018 %>%
+  summarize(sum_total_investment = sum(total_investment, na.rm = TRUE)) 
+```
+The total investment amount for all projects in Brazil in the 2018 fiscal year was `r brazil_investment_projects_2018_total` million dollars.
+
+### 2.2 Adding plots
+We can make plots the same way we would in the console. Simply put the code in a code chunk, and the plot will render when the file is knit. We will use the `investment_annual_summary` data  to create a line plot with `ggplot2` to visualize the investment amount of dollars in millions across different fiscal years.
+```{r investment-annual-summary}
+ggplot(investment_annual_summary, aes(fiscal_year, dollars_in_millions,
+                                      color = region)) + 
+  geom_line() +
+  labs(title = "Investment Annual Summary",
+       x = "Fiscal Year",
+       y = "Dollars in Millions")
+```
+
+Now we can see the investment amount has varied over time across the different regions. 
+
+Create a scatter plot for the investment projects in Indonesia:
+```{r indonesia-investment-projects-plot}
+ggplot(indonesia_investment_projects, aes(date_disclosed, total_investment,
+                                          color = status)) + 
+  geom_point() +
+  labs(title = "Investment Projects in Indonesia",
+       x = "Date Disclosed",
+       y = "Total IFC Investment in Dollars in Millions")
+```
+
+
+The knitted file gives a warning message that one of the points was removed due to missing values. Take a closer look at the data to see why are these points removed:
+```{r}
+indonesia_investment_projects
+```
+The LMS Toll Project is on hold and has no investment values listed, inclusing for the total investment. Since we use the investment amounts to create the plot, and the project is on hold, it has no associated investment amounts, the data is excluded from the plot. This is another example of something we may want to include in the text of the report to provide more information to the audience.
+
+Oftentimes we want to modify the figure dimensions of the plot. The width and height of the figure can be specified with `fig.width` and `fig.height`.
+```{r investment-annual-summary-plot, fig.width = 5, fig.height = 3}
+ggplot(investment_annual_summary, aes(fiscal_year, dollars_in_millions,
+                                      color = region)) + 
+  geom_line() +
+  labs(title = "Investment Annual Summary",
+       x = "Fiscal Year",
+       y = "Dollars in Millions")
+```
+
+Note that each additional option is separated by a comma. Alternatively, instead of specifying these dimensions separately, we can use `fig.dim = c(5,3)`.
+
+We are also able to  modify the dimensions of the figure using `out.width` and `out.height`. These arguments determine the dimensions of the output of the images in the knit document, and are specified as percentage.
+```{r investment-annual-summary-plot2, out.width = "50%"}
+ggplot(investment_annual_summary, aes(fiscal_year, dollars_in_millions,
+                                      color = region)) + 
+  geom_line() +
+  labs(title = "Investment Annual Summary",
+       x = "Fiscal Year",
+       y = "Dollars in Millions")
+```
+
+Figures can be aglined with `fig.align`. The options are: `'left`, `right` and `center` listed in quotations. 
+```{r investment-annual-summary-plot3, out.width = "50%", fig.align='left'}
+ggplot(investment_annual_summary, aes(fiscal_year, dollars_in_millions,
+                                      color = region)) + 
+  geom_line() +
+  labs(title = "Investment Annual Summary",
+       x = "Fiscal Year",
+       y = "Dollars in Millions")
+```
+
+The setting in the code chunks can be locally or globally. The local setting is added to each code chunk and only impacts the code contained in that chunk. If we set the options globally instead, they will apply to all figures throughout the code chunks in the report. This setting should be created right in the beginning of the document, after the YAML title.
+
+In addition to modifying the formatting of the figure, we can also add a caption to each figure using `fig.cap`.
+and `center` listed in quotations. 
+```{r investment-annual-summary-plot4, out.width = "50%", fig.align = "left", fig.cap = "Figure 1.1 The Investment Annual Summary for each region  for the 2012 to 2018 fiscal years"}
+ggplot(investment_annual_summary, aes(fiscal_year, dollars_in_millions,
+                                      color = region)) + 
+  geom_line() +
+  labs(title = "Investment Annual Summary",
+       x = "Fiscal Year",
+       y = "Dollars in Millions")
+```
