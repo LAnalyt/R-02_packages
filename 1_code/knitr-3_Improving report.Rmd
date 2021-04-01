@@ -1,0 +1,151 @@
+---
+title: 'REPORTING WITH R MARKDOWN: IMPROVING THE REPORT'
+author: "source: DataCamp"
+output: html_document
+date: "Last edited: `r format(Sys.time(), '%d %B %Y')`"
+---
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(fig.align = "center", echo = TRUE)
+```
+
+```{r data, include = FALSE}
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(knitr)
+investment_annual_summary <- read_csv("https://raw.githubusercontent.com/ltrangng/R-02_packages/master/0_data/investment_annual_summary.csv")
+investment_services_projects <- read_csv("https://raw.githubusercontent.com/ltrangng/R-02_packages/master/0_data/investment_services_projects.csv")
+```
+### 3.1 Organizing the report
+You can add more information into your report using bulleted list. Items are added to a bulleted list using an `-`, `+` or `*` outside of any code chunks. Sub-bullets can be created by adding indentation before an item on the list.
+```
+- Region
+  - East Asia and the Pacific
+  - Europe and Central Asia
+  - Latin America and the Caribbean
+  - Middle East and North Africa
+  - South Asia
+  - Sub-Saharan Africa
+```
+- Region
+  - East Asia and the Pacific
+  - Europe and Central Asia
+  - Latin America and the Caribbean
+  - Middle East and North Africa
+  - South Asia
+  - Sub-Saharan Africa
+
+Alternatively, we create a numbered list by adding numbers with periods before each item on the list.
+```
+Region
+1. East Asia and the Pacific
+2. Europe and Central Asia
+3. Latin America and the Caribbean
+4. Middle East and North Africa
+5. South Asia
+6. Sub-Saharan Africa
+```
+Region
+
+1. East Asia and the Pacific
+2. Europe and Central Asia
+3. Latin America and the Caribbean
+4. Middle East and North Africa
+5. South Asia
+6. Sub-Saharan Africa
+
+Tables can be added with `kabble()` function from the `knitr` package. The `knitr` package is what runs each code chunk  and knits the document. There are a number of options to customize the table, but it is not possible to format the table within the table to perform tasks like combining cells. These wrangling tasks should be done before using `kable()` to create the table.
+```{r indonesia}
+indonesia_investment_projects <- investment_services_projects %>% filter(country == "Indonesia")
+indonesia_investment_projects_2012_summary <- 
+  investment_services_projects %>% filter(country == "Indonesia",
+                                          date_disclosed >= "2011-07-01",
+                                          date_disclosed <= "2012-06-30") %>%
+  select(project_name, status, total_investment)
+```
+```{r tables}
+kable(indonesia_investment_projects_2012_summary)
+
+```
+We can modify the column names of the table using the `col.names` argument within the `kable()` function.
+```{r tables-col}
+kable(indonesia_investment_projects_2012_summary,
+      col.names = c("Project Name", "Status", "Total Investment"))
+```
+
+Alignment is using a single letter: `l` for left, `r` for right, and `c` for center. Modify the `align` argument in `kabble()` so that everything is aligned to the center:
+```{r tables-align}
+kable(indonesia_investment_projects_2012_summary,
+      col.names = c("Project Name", "Status", "Total Investment"),
+      align = "ccc")
+```
+Adding caption to the table with `caption` argument and passing a string:
+```{r tables-caption}
+kable(indonesia_investment_projects_2012_summary,
+      col.names = c("Project Name", "Status", "Total Investment"),
+      align = "ccc",
+      caption = "Table 1.1 The total investment summary for each project in Indonesia fo the 2012 fiscal year")
+```
+
+### 3.2 Code chunk options
+The `include` option inside the code chunk determines whether or not the code and the resuts appear in the report. When `include = FALSE`, the code and the result do not appear in the report. The default argument for `include` is `TRUE`, since `include` is not specified in any other code chunks.
+```
+{r data, include = FALSE}
+```
+A related option is `echo`. When the `echo` option is set to `FALSE`, it prevents the code from appearing in the knit file, but displays the results of the code. This is the option we might use when creating plots. Similary to `include`, the default for `echo` is also `TRUE`.
+```{r investment-annual-summary, out.width = "85%", fig.cap = "Figure 1.1 The Investment Annual Summary for each region  for the 2012 to 2018 fiscal years", echo = FALSE}
+ggplot(investment_annual_summary, aes(fiscal_year, dollars_in_millions,
+                                      color = region)) + 
+  geom_line() +
+  labs(title = "Investment Annual Summary",
+       x = "Fiscal Year",
+       y = "Dollars in Millions")
+```
+
+The `eval` option specifies whether or not we want to evaluate the code in a code chunk. `eval = FALASE` excludes a code chunk from the report for the time being. The code will not run and the results will not be included in the report. Notice that the code itself still appears in the report. This differs from other options like `include`, because the code does not impact the report. The default for `eva` is `TRUE`, since all code chunks are evaluated when the report is knitted.
+```{r tables-eval, eval = FALSE}
+kable(indonesia_investment_projects_2012_summary,
+      col.names = c("Project Name", "Status", "Total Investment"),
+      align = "ccc")
+```
+Summary of the options sofar:
+
+<img src = "https://raw.githubusercontent.com/ltrangng/R-02_packages/master/2_resources/knitr_code%20chunk%20option.JPG" width = "500">
+
+Another chunk option is `collapse`. The `collapse` option specifies whether or not the code and any text output are split into multiple blocks or included in a single block in the final report. 
+
+For example, when knitting this code chunk we receive a warning message as a separate text block.
+```{r indonesia-investment-projects-plot}
+ggplot(indonesia_investment_projects, aes(date_disclosed, total_investment,
+                                          color = status)) + 
+  geom_point() +
+  labs(title = "Investment Projects in Indonesia",
+       x = "Date Disclosed",
+       y = "Total IFC Investment in Dollars in Millions")
+```
+
+We can modify these render in the final report using the `collapse` option. Unlike other options, the default option for `collapse` is `FALSE`. This means that the code from the code chunk and text output resulting from the code will be separated in the knit report. 
+```{r indonesia-investment-projects-plot-collapse, collapse=TRUE}
+ggplot(indonesia_investment_projects, aes(date_disclosed, total_investment,
+                                          color = status)) + 
+  geom_point() +
+  labs(title = "Investment Projects in Indonesia",
+       x = "Date Disclosed",
+       y = "Total IFC Investment in Dollars in Millions")
+```
+
+The code and text output are merged into a single block with `collapse = TRUE`. However, if we want to exclude this warning message entirely, the `warning` option should be set to `FALSE`.
+```{r indonesia-investment-projects-plot-warning, warning = FALSE}
+ggplot(indonesia_investment_projects, aes(date_disclosed, total_investment,
+                                          color = status)) + 
+  geom_point() +
+  labs(title = "Investment Projects in Indonesia",
+       x = "Date Disclosed",
+       y = "Total IFC Investment in Dollars in Millions")
+```
+
+If we exclude these warnings, we may want to include additional information about them in the text or the report.
+
+So far there is no other message because another option `include = FALSE`has been included in the global setting. `include = FALSE` prevents the code and any results of the code from appearing in the final report. If we remove this option, we will see messages appear in the knit file. these messages are related to the packages and the data files that are loaded in this chunk. If `message = FALSE` is included, the messages do not appear in the Markdown.
+
+The `error` option determines how errors in the code should be handled when knitting the report. The default option for `error` is `FALSE`, which means that if there is an error and we attempt to knit the file, the report will stop knitting when it encounters an error and return the error. If `error = TRUE` instead, the report will knit, even with errors in the code, and the report will include the errors. This option is used less commonly, but it can be useful when working on a report to point out which code chunks are running as expected and which code chunks are causing errors. This setting should be included in the global setting to apply to all the code chunks.

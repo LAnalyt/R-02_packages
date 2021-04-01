@@ -1,0 +1,228 @@
+---
+title: 'REPORTING WITH R MARKDOWN: CUSTOMIZING THE REPORT'
+author: "source: DataCamp"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+params: 
+  country: Indonesia
+  year_start: 2011-07-01
+  year_end: 2012-06-30
+  fy: 2012
+date: "Last edited: `r format(Sys.time(), '%d %B %Y')`"
+---
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(fig.align = "center", echo = TRUE)
+```
+
+```{r data, include = FALSE}
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(knitr)
+investment_annual_summary <- read_csv("https://raw.githubusercontent.com/ltrangng/R-02_packages/master/0_data/investment_annual_summary.csv")
+investment_services_projects <- read_csv("https://raw.githubusercontent.com/ltrangng/R-02_packages/master/0_data/investment_services_projects.csv")
+```
+
+### 4.1 Table of contents
+Including a table of contents provides the audience with an overview of the report. To add a table of contents we add `toc: true` as a new key value in the YAML header. The file won't knit unless the correct indentation is used in the YAML header. The `toc` field is included with an added indentation, and nested within the `html_document` field.
+```
+title: "Report Name"
+author: "Your Name"
+output: 
+  html_document:
+    toc: true
+```
+We can specify which headers will appear in the table of contents by adding `toc_depth` field. The number listed in this field specifies the size of headers that will be listed in the table of contents. 
+```
+title: "Report Name"
+author: "Your Name"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 2
+    number_sections: true
+```
+For example, a `toc_depth` of 2 means that headers that use two `##` and larger headers that use one `#` will appear in the table of contents. By default, the depth of 3 is for HTML documents and 2 for PDF documents. Similarly, section number can be added to headers with `number_sections: true`. If we include number sections with decimal numbering starting with 1, the largest header in the report should use one `#`. If the largest header starts with two `##`, the numbering will start with 0.
+
+When creating HTML documents, we have some additional options for the table of contents. When `toc_float: true` is included in the YAML header, the table of contents will appear on the left side of the document and will continue to remain visible while the reader scrolls through the document. Within `toc_float`, the `collapse` option determines whether or not the table of contents only displays the largest headers. When `collapse` is used, the table of contents expands as someone is reading through the report or navigating to another section. When `collapse: false`, the full table of contents remains visible.
+```
+title: "Report Name"
+author: "Your Name"
+output: 
+  html_document:
+    toc: true
+    toc_float:
+      collapse: false
+    toc_depth: 2
+    number_sections: true
+
+```
+The `smooth_scroll` is also `true` by default. This option animates page scrolls when a reader clicks on an item in the table of contents to navigate to another section of the report. When `smooth_scroll: false` is included in the YAML header, clicking on an item in the table of contents will navigate the reader to that section of the article without animation. 
+
+The `toc`, `toc_depth` are separate attributes, while `collapse` and `smooth_scroll` options are nested within the `toc_float` field. Since these options are nested, `true` could be removed from `toc_float` when specifying either `collpase` or `smooth_scroll`.
+
+### 4.2 Parameters
+Using the `investment_services_projects` data, we could create reports for a number of different countries. But creating reports for 10 countries would require a lot of time and effort to create each report separately and manually edit each report for each country. Instead of manually editing new reports, we can use a *parameter* to efficiently create new reports that summarize the data for different countries. 
+
+`params` are used to create a report with specific values for key inputs that are listed in the YAML header. For example, add `country` to the `params` key in the YAML header, since we will be using it to indicate the country that will be the focus of the report. List Indonesia as the country, but not in quotation. 
+```
+title: "Investment Report"
+output: html_document
+params:
+  country: Indonesia
+```
+After adding the parameter, review each element of the document, the code, text, and YAML header for any references to a specific country. While reviewing the code, also rename any code chunks and objects that reference a particular country to avoid confusion.
+```{r country-investment-projects}
+country_investment_projects <- investment_services_projects %>% 
+  filter(country == params$country)
+```
+The country name in `filter` has been replaced with `params$country`, where `country` is the parameter added to the YAML header. 
+
+The text with references to a particular country in the report could be replaced with `r` `params$country` to be consistent with the specified country. 
+```
+### Investment Projects in `r params$country`
+```
+Finally review the YAML header and modify the document title to include the country using the paramenter.
+```
+tittle: "Investment Report for Projects in `r params$country`
+```
+When we the `country` parameter is changed with "Turkey", for example, the resulting report is updated with the information from this country. We only need to change the `country` parameter once. 
+
+Another information could be used as a parameter is the fiscal year. In the YAML header, below the existing `country` parameter, add `fy` for fiscal year. 
+```
+params:
+  country: Indonesia
+  fy: 2012
+```
+The fiscal year is defined by the start and end dates of the year. Add a starting date and ending date to clarify the time period. The date format is preserved from the data: year-month-date.
+```
+params:
+  country: Indonesia
+  year_start: 2011-07-01
+  year_end:2012-06-30
+  fy: 2012
+```
+Review the content of the report to ensure that the new report won't make incorrect references to previous versions of the report. While reviewing the code, replace the date filter with `params$year_start` and `params$year_end`.
+```{r country-investment-projects-annual}
+country_annual_investment_projects <- investment_services_projects %>%
+  filter(country == params$country,
+         date_disclosed >= params$year_start,
+         date_disclosed <= params$year_end)
+ggplot(country_annual_investment_projects, aes(date_disclosed, total_investment, color = status)) + geom_point() + 
+  labs(title = "Investment Service Projects",
+       x = "Date Disclosed",
+       y = "Total IFC Investment in Dollars in Millions")
+```
+Also rename any code chunks and objects that reference a particular fiscal year and use the word "annual" in the names instead, so that they will apply to new reports that summarize information about other fiscal years. Specific references to a particular year in the text and header of the document can be replaces with `r` `params$fy`.
+```
+## Investment Projects in `r params$country` in `r params$fy`
+```
+To knit a new report for Turkey in the fiscal year 2013, we only need to change the parameters in YAML:
+```
+params:
+  country: Turkey
+  year_start: 2011-07-01
+  year_end:2012-06-30
+  fy: 2013
+```
+The report will be updated with new information.
+
+### 4.3 Customize
+Customize the report using colors and fonts to reflect a brand with CSS (Cascading Style Sheet) or HTML languages. 
+Commonly used properties include:
+
+-    `color`
+-    `background-color`
+-    `font-family`
+-    `font-size`
+
+The `<style> </style>` section can be included anywhere in the document, outside of any code chunks.
+```{css}
+<style>
+body {
+  color: red;  
+}
+</style>
+```
+To keep the sections organized, it is recommended to add the code to the top of the document, below the YAML header. If the `;` after one property is missing, it will not throw an error, but the style will not be updated. 
+
+We can also use hex codes to specify colors.
+```{css}
+<style>
+body {
+  color: #708090;
+  font-family: Calibri;
+  background-color: #F5F5F5
+}
+</style>
+```
+There are many references we could use to look up color hex codes. If we include code chunks, we can modify them using `pre` setting.
+```{css}
+<style>
+body {
+  color: #708090;
+  font-family: Calibri;
+  background-color: #F5F5F5;
+}
+pre {
+  color: #708090;
+  background-color: #F8F8FF;
+}
+</style>
+```
+The table of contents properties are specified using `#TOC`.
+```{css}
+<style>
+#TOC {
+  color: #708090;
+  font-family: Calibri;
+  font-size: 16px;
+  border-color: #708090
+}
+  body {
+  color: #708090;
+  font-family: Calibri;
+  background-color: #F5F5F5;
+}
+pre {
+  color: #708090;
+  background-color: #F8F8FF;
+}
+</style>
+```
+At a high level, `px` corresponds to the pixels and the way the text appears varies depending on the device being used to view the report. 
+
+The `header` properties are specified with `#` header. 
+```{css}
+#header {
+  color: #800000;
+  background-color: #F5F5F5;
+  opacity: 0.6;
+  font-family: Calibri;
+  font-size: 20px;
+}
+```
+The `opacity` setting specifies the transparency of the text. The default value is 1. Notice that the header styles modify all aspects of the header, including the title, date, and author. Alternatively, we can modify each header element individually.
+```{css}
+h1.title {
+  color: #800000;
+  background-color: #F5F5F5;
+  opacity: 0.6;
+  font-family: Calibri;
+  font-size: 40px;
+}
+h4.author {
+  color: #708090;
+  font-family: Calibri;
+}
+```
+Instead of adding styles within the file, it is also possible to reference a CSS file  that contains specific styles. This means we can reuse a CSS file  for many different documents without needing to copy and paste the CSS  code into each new Markdown file we create. This style can be created with any text editor and saved with .CSS extension. Then we add a CSS field to the YAML header and the name of the style sheet.  
+```;
+output:
+  html_document:
+    css: styles.css
+    toc: true
+    toc_float: true
+```
