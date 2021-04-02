@@ -1,3 +1,7 @@
-# R packages
+# Useful R packages/libraries
 
-**1. data.table**
+**knitr**
+
+**data.table**
+
+**parallel**
