@@ -1,4 +1,4 @@
-# COMPUTING ON COLUMNS
+# 2. COMPUTING ON COLUMNS
 
 # Just as the i argument lets you filter rows, the j argument of data.table lets you select columns and also perform computations. The syntax is far more convenient and flexible when compared to data.frames.  
 # Load packages and datasets:

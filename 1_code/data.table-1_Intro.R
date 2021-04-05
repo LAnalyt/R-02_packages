@@ -1,4 +1,4 @@
-# INTRODUCTION TO DATA.TABLE
+# 1. INTRODUCTION TO DATA.TABLE
 
 # The `data.table` package provides a high-performance version of base R's data.frame with syntax and feature enhancements for ease of use, convenience and programming speed. 
 
