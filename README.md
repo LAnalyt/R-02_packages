@@ -1,8 +1,8 @@
 # Useful R packages/libraries
 
-**knitr**
-
 **data.table**
+
+**knitr**
 
 **lubridate**
 
