@@ -9,7 +9,7 @@ batrips <- as.data.table(batrips)
 
 # 2.1 Selecting column ####
 # Similarly to data.frame, you can pass a character vector of column names to select the relevant columns.
-ans <- batrips[ , "trip_id"]
+ans <- batrips[, "trip_id"]
 head(ans, 2)
 class(ans)
 # The different in the result is selection columns in data.table returns a data.table whereas data.frame results a vector. This consistency in the output avoids accidental errors in code. 
@@ -17,14 +17,14 @@ class(ans)
 batrips[ , c(2, 4)]
 # However, using column numbers is a bad practice except when having a quick look at the data interactively. An inadvertent change to the original column structure can lead to incorrect results and bugs.
 # Deselecting columns with "-" or "!" sign prefix to exclude a set of columns from the result:
-ans <- batrips[ , !c("start_date", "end_date", "end_station")]
+ans <- batrips[, !c("start_date", "end_date", "end_station")]
 head(ans, 1)
 # The data.frame approach in data.table limits in selecting columns only. In order to compute on columns and perform advanced data manipulations, we will need to use the data.table approach. For j argument, we can refer to columns directly as if they are variables. Since we often need to select more than one column, j accepts a list of column. 
-ans <- batrips[ , list(trip_id, dur = duration)]
+ans <- batrips[, list(trip_id, dur = duration)]
 # Wrapping the column name within list() always returns a data.table.
 class(ans)
 # When selecting a single column without wrapping the variable by list() returns a vector.
-ans <- batrips[ , trip_id]
+ans <- batrips[, trip_id]
 is.vector(ans)
 # .() is also an alias to list() as one concise way of writing code.
 ans <- batrips[ , .(trip_id, duration)]
@@ -32,9 +32,9 @@ head(ans, 2)
 
 # 2.2 Compute columns ####
 # Since columns can be referred to as variables, we can compute directly. E.g, compute the average duration:
-batrips[ , mean(duration)] # returns a vector, since it's not in list().
+batrips[, mean(duration)] # returns a vector, since it's not in list().
 # Compute this in the data.frame way:
-mean(batrips[ , "duration"])
+mean(batrips[, "duration"])
 # The data.table way of computing directly on columns allows for clear, convenient and concise code and can be easily extended to calculate statistics on multiple columns.
 # Combining i and j to compute the mean of duration for trips from "Japan town":
 batrips[start_station == "Japantown", mean(duration)]
@@ -52,7 +52,7 @@ head(trip_duration)
 
 # 2.3 Advanced computations
 # Compute on multiple columns with .(), e.g, get the mean and median of duration:
-batrips[ , .(mn_dur = mean(duration),
+batrips[, .(mn_dur = mean(duration),
              med_dur = median(duration))]
 # Get the min and max duration values without renaming the columns:
 batrips[, .(min(duration), max(duration))]
