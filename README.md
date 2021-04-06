@@ -1,7 +1,9 @@
 # Useful R packages/libraries
 
+**data.table**
+
 **knitr**
 
-**data.table**
+**lubridate**
 
 **parallel**
