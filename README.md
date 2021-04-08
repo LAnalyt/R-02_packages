@@ -4,6 +4,4 @@
 
 **knitr**
 
-**lubridate**
-
 **parallel**
