@@ -1,0 +1,236 @@
+continent,country
+africa,Algeria
+africa,Angola
+africa,Benin
+africa,Botswana
+africa,Burkina Faso
+africa,Burundi
+africa,Cape Verde
+africa,Cameroon
+africa,Central African Republic
+africa,Chad
+africa,Comoros
+africa,"Congo, Dem. Rep."
+africa,"Congo, Rep."
+africa,Cote d'Ivoire
+africa,Djibouti
+africa,Egypt
+africa,Equatorial Guinea
+africa,Eritrea
+africa,Ethiopia
+africa,Gabon
+africa,Gambia
+africa,Ghana
+africa,Guinea
+africa,Guinea-Bissau
+africa,Kenya
+africa,Lesotho
+africa,Liberia
+africa,Libya
+africa,Madagascar
+africa,Malawi
+africa,Mali
+africa,Mauritania
+africa,Mauritius
+africa,Morocco
+africa,Mozambique
+africa,Namibia
+africa,Niger
+africa,Nigeria
+africa,Rwanda
+africa,Sao Tome and Principe
+africa,Senegal
+africa,Seychelles
+africa,Sierra Leone
+africa,Somalia
+africa,South Africa
+africa,South Sudan
+africa,Sudan
+africa,Swaziland
+africa,Tanzania
+africa,Togo
+africa,Tunisia
+africa,Uganda
+africa,Zambia
+africa,Zimbabwe
+asia,Afghanistan
+asia,Armenia
+asia,Azerbaijan
+asia,Bahrain
+asia,Bangladesh
+asia,Bhutan
+asia,Brunei
+asia,Cambodia
+asia,China
+asia,Cyprus
+asia,Georgia
+asia,India
+asia,Indonesia
+asia,Iran
+asia,Iraq
+asia,Israel
+asia,Japan
+asia,Jordan
+asia,Kazakhstan
+asia,Kuwait
+asia,Kyrgyz Republic
+asia,Lao
+asia,Lebanon
+asia,Malaysia
+asia,Maldives
+asia,Mongolia
+asia,Nepal
+asia,North Korea
+asia,Oman
+asia,Pakistan
+asia,Palestine
+asia,Philippines
+asia,Qatar
+asia,Russia
+asia,Saudi Arabia
+asia,Singapore
+asia,South Korea
+asia,Sri Lanka
+asia,Syria
+asia,Taiwan
+asia,Tajikistan
+asia,Thailand
+asia,Timor-Leste
+asia,Turkey
+asia,Turkmenistan
+asia,United Arab Emirates
+asia,Uzbekistan
+asia,Vietnam
+asia,Yemen
+asia,"Hong Kong, China"
+asia,"Macao, China"
+asia,West Bank and Gaza
+europe,Albania
+europe,Andorra
+europe,Armenia
+europe,Austria
+europe,Azerbaijan
+europe,Belarus
+europe,Belgium
+europe,Bosnia and Herzegovina
+europe,Bulgaria
+europe,Croatia
+europe,Cyprus
+europe,Czech Republic
+europe,Channel Islands
+europe,Denmark
+europe,Estonia
+europe,Finland
+europe,France
+europe,Georgia
+europe,Germany
+europe,Greece
+europe,Hungary
+europe,Iceland
+europe,Ireland
+europe,Italy
+europe,Kazakhstan
+europe,Kosovo
+europe,Latvia
+europe,Liechtenstein
+europe,Lithuania
+europe,Luxembourg
+europe,"Macedonia, FYR"
+europe,Malta
+europe,Moldova
+europe,Monaco
+europe,Montenegro
+europe,Netherlands
+europe,Norway
+europe,Poland
+europe,Portugal
+europe,Romania
+europe,Russia
+europe,San Marino
+europe,Serbia
+europe,Slovak Republic
+europe,Slovenia
+europe,Spain
+europe,Sweden
+europe,Switzerland
+europe,Turkey
+europe,Ukraine
+europe,United Kingdom
+europe,Isle of Man
+europe,Faeroe Islands
+north_america,Antigua and Barbuda
+north_america,Bahamas
+north_america,Barbados
+north_america,Belize
+north_america,Canada
+north_america,Costa Rica
+north_america,Cuba
+north_america,Dominica
+north_america,Dominican Republic
+north_america,El Salvador
+north_america,Grenada
+north_america,Guatemala
+north_america,Haiti
+north_america,Honduras
+north_america,Jamaica
+north_america,Mexico
+north_america,Nicaragua
+north_america,Panama
+north_america,St. Kitts and Nevis
+north_america,St. Lucia
+north_america,St. Vincent and the Grenadines
+north_america,Trinidad and Tobago
+north_america,United States
+north_america,Anguilla
+north_america,Aruba
+north_america,Bermuda
+north_america,Bonaire
+north_america,British Virgin Islands
+north_america,Cayman Islands
+north_america,Clipperton Island
+north_america,Curacao
+north_america,Greenland
+north_america,Guadeloupe
+north_america,Martinique
+north_america,Montserrat
+north_america,Navassa Island
+north_america,Puerto Rico
+north_america,Saba
+north_america,St. Barthelemy
+north_america,St. Martin
+north_america,St. Pierre and Miquelon
+north_america,St. Eustatius
+north_america,St. Maarten
+north_america,Turks and Caicos Islands
+north_america,US Virgin Islands
+oceania,Australia
+oceania,Fiji
+oceania,French Polynesia
+oceania,Kiribati
+oceania,Marshall Islands
+oceania,"Micronesia, Fed. Sts."
+oceania,Naurua
+oceania,New Caledonia
+oceania,New Zealand
+oceania,Palau
+oceania,Papua New Guinea
+oceania,Samoa
+oceania,Solomon Islands
+oceania,Tonga
+oceania,Tuvalu
+oceania,Vanuatu
+south_america,Argentina
+south_america,Bolivia
+south_america,Brazil
+south_america,Chile
+south_america,Colombia
+south_america,Ecuador
+south_america,Guyana
+south_america,Paraguay
+south_america,Peru
+south_america,Suriname
+south_america,Uruguay
+south_america,Venezuela
+south_america,Falkland Islands
+south_america,French Guiana
+south_america,South Georgia and the South Sandwich Islands
