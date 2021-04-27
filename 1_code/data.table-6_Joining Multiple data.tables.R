@@ -5,7 +5,7 @@ library(data.table)
 
 # 6.1 Joining data.tables ####
 # A join describes the action of combining information from two different data.tables into a single data.table. This is a fundamental skill when working with multiple data sources. The majority of R's functions for analyzing and visualizing data are designed to work on a single data.frame or data.table. But often the data is spread across multiple datasets, that may come from different sources.
-# Load the two datasets "netflix" which contains information about some of the Netflix original series released in 2017:
+# Load the "netflix" dataset which contains information about some of the Netflix original series released in 2017:
 netflix <- as.data.table(read.csv("netflix_2017.csv"))
 # Load the "imdb" dataset which contains ratings for some TV shows and movies obtained from IMDB:
 imdb <- as.data.table(read.csv("imdb_ratings.csv"))
